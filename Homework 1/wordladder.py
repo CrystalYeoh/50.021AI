@@ -42,7 +42,7 @@ class WordLadderProblem(Problem):
 
 # Breadth first search works only for easier cases, and takes too long/takes up too much memory for other cases like wheat to bread, or stone to money
 print("BFS for cold to warm")
-path = breadth_first_tree_search(WordLadderProblem("cold","warm")).path()
+path = breadth_first_search(WordLadderProblem("stone","money")).path()
 for i in path:
     print(i)
 
