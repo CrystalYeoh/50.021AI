@@ -40,6 +40,7 @@ class WordLadderProblem(Problem):
                 cost +=1
         return cost
 
+
 # Breadth first search works only for easier cases, and takes too long/takes up too much memory for other cases like wheat to bread, or stone to money
 print("BFS for cold to warm")
 path = breadth_first_search(WordLadderProblem("stone","money")).path()

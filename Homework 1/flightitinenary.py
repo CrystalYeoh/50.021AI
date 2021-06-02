@@ -55,7 +55,7 @@ class FlightItineraryProblem(Problem):
         new_state = {"city":action.end_city,"time":action.end_time}
         return new_state
 
-    # Check if the state is equals to the goal
+    # Check if the state is equals to the goal, and that we reach at an earlier time
     def goal_test(self, state):
         return state["city"] == self.goal["city"] and state["time"] <= self.goal["time"]
 
@@ -64,11 +64,17 @@ class FlightItineraryProblem(Problem):
         return c + (state2["time"] - state1["time"])
 
 def find_itinerary(start_city, start_time, end_city, deadline):
-    path = uniform_cost_search(FlightItineraryProblem({"city":start_city,"time":start_time},{"city":end_city,"time":deadline})).path()
-    for i in path:
-        print(i)
+    return uniform_cost_search(FlightItineraryProblem({"city":start_city,"time":start_time},{"city":end_city,"time":deadline}))
 
-find_itinerary('Rome',1,'Istanbul',10)
+
+# Run this test if you would like to know
+def test1():
+    node = find_itinerary('Rome',1,'Istanbul',10)
+    if node != None:
+        for i in node.path():
+            print(i)
+    else:
+        print("No solution was found")
 
 # Part 4
 """
@@ -76,7 +82,43 @@ i) Yes this strategy will find the path that arrives the soonest, given that we 
 
 ii) If we use this strategy to solve a shortest path with length 200, it should take about 2x calls of find_itinerary to find.
 
-iii) Done below
+iii) Done below with function find_shortest_itinerary()
+
+iv) Done below with function find_shortest_itinerary_optimized()
+Since I am using the UCS, the path found by find_itinerary is already the shortest path within the deadline. Thus to find the shortest path, I only need to start with a big deadline. This results in only needing to call find_itinerary() once.
 
 
 """
+
+def find_shortest_itinerary(start_city, start_time, end_city):
+    i = 1
+    while i>0:
+        node = find_itinerary(start_city,start_time,end_city,start_time+i)
+        if node != None:
+            print("Path found at {}th call".format(i))
+            return node
+        else: 
+            i+=1
+
+# Run to test shortest itinerary function
+def test2():
+    node = find_shortest_itinerary('Rome',1,'Istanbul')
+    if node != None:
+        for i in node.path():
+            print(i)
+    else:
+        print("No solution was found")
+
+def find_shortest_itinerary_optimized(start_city,start_time,end_city):
+    return find_itinerary(start_city,start_time,end_city,sys.maxsize)
+
+# Run to test shortest itinerary function optimized
+def test3():
+    node = find_shortest_itinerary_optimized('Rome',1,'Istanbul')
+    if node != None:
+        for i in node.path():
+            print(i)
+    else:
+        print("No solution was found")
+
+
